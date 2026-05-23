@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Level -1,000,000,000,001 — Мёртвая координата</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        linear-gradient(rgba(15, 12, 8, 0.85), rgba(15, 12, 8, 0.96)),
+        radial-gradient(circle at top, #6d5b42, #15110d 60%, #070605);
+      color: #d8c7a4;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.025) 0px,
+          rgba(255,255,255,0.025) 1px,
+          transparent 2px,
+          transparent 5px
+        );
+      mix-blend-mode: overlay;
+      opacity: 0.35;
+      z-index: 999;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image:
+        radial-gradient(circle, #fff 1px, transparent 1px);
+      background-size: 4px 4px;
+      z-index: 998;
+      animation: noiseMove 0.25s infinite linear;
+    }
+
+    @keyframes noiseMove {
+      from { transform: translate(0, 0); }
+      to { transform: translate(-4px, 4px); }
+    }
+
+    header {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      background:
+        linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.9)),
+        url("https://images.unsplash.com/photo-1517999349371-c43520457b23?auto=format&fit=crop&w=1600&q=60");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero {
+      max-width: 900px;
+      padding: 35px;
+      border: 1px solid rgba(216, 199, 164, 0.25);
+      background: rgba(8, 7, 5, 0.72);
+      box-shadow: 0 0 45px rgba(0,0,0,0.8);
+      backdrop-filter: blur(4px);
+    }
+
+    .label {
+      color: #b94e33;
+      letter-spacing: 4px;
+      font-size: 13px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 7vw, 76px);
+      line-height: 1;
+      color: #e6d3aa;
+      text-shadow: 0 0 18px rgba(180, 110, 55, 0.45);
+    }
+
+    .subtitle {
+      margin-top: 20px;
+      font-size: clamp(18px, 3vw, 28px);
+      color: #c0a879;
+    }
+
+    .warning {
+      margin: 25px auto 0;
+      max-width: 620px;
+      color: #d9825a;
+      border-top: 1px solid rgba(217, 130, 90, 0.35);
+      border-bottom: 1px solid rgba(217, 130, 90, 0.35);
+      padding: 12px;
+      font-family: "Courier New", monospace;
+      animation: flicker 3s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
+      52% { opacity: 0.95; }
+      54% { opacity: 0.35; }
+      56% { opacity: 1; }
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 8, 6, 0.95);
+      border-bottom: 1px solid rgba(216, 199, 164, 0.18);
+      padding: 12px;
+      text-align: center;
+    }
+
+    nav a {
+      color: #cdb687;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #f0d8a0;
+      text-shadow: 0 0 10px #b94e33;
+    }
+
+    main {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 40px 18px 80px;
+    }
+
+    section {
+      margin: 45px 0;
+      padding: 28px;
+      background: rgba(22, 18, 13, 0.82);
+      border: 1px solid rgba(216, 199, 164, 0.15);
+      box-shadow: 0 0 25px rgba(0,0,0,0.35);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #e0c88f;
+      font-size: 30px;
+      border-bottom: 1px solid rgba(224, 200, 143, 0.25);
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      color: #d98a5f;
+      margin-bottom: 5px;
+    }
+
+    .class-box {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .class-card {
+      padding: 18px;
+      background: rgba(0,0,0,0.25);
+      border-left: 4px solid #a0472d;
+    }
+
+    .class-card strong {
+      display: block;
+      color: #f0d8a0;
+      font-size: 20px;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .photo {
+      min-height: 180px;
+      background:
+        linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.5)),
+        radial-gradient(circle at center, #8c7454, #2a2117 70%);
+      border: 1px solid rgba(216, 199, 164, 0.18);
+      display: flex;
+      align-items: end;
+      padding: 14px;
+      color: #ead9b2;
+      font-size: 14px;
+      filter: saturate(0.7) contrast(1.1);
+    }
+
+    .photo:nth-child(1) {
+      background:
+        linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.65)),
+        url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .photo:nth-child(2) {
+      background:
+        linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.65)),
+        url("https://images.unsplash.com/photo-1517999349371-c43520457b23?auto=format&fit=crop&w=800&q=60");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .photo:nth-child(3) {
+      background:
+        linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.65)),
+        url("https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=60");
+      background-size: cover;
+      background-position: center;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .entity {
+      margin-top: 22px;
+      padding: 20px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(217, 130, 90, 0.18);
+    }
+
+    .danger {
+      color: #ff9b73;
+      font-family: "Courier New", monospace;
+    }
+
+    .terminal {
+      background: #090806;
+      border: 1px solid rgba(217, 130, 90, 0.35);
+      color: #d9825a;
+      font-family: "Courier New", monospace;
+      padding: 18px;
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    .terminal span {
+      display: block;
+      margin: 4px 0;
+    }
+
+    .quote {
+      font-size: 22px;
+      color: #e8d8b4;
+      border-left: 4px solid #b94e33;
+      padding-left: 18px;
+      margin: 25px 0;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      padding: 35px 20px;
+      background: #070605;
+      border-top: 1px solid rgba(216, 199, 164, 0.15);
+      color: #816e50;
+      font-size: 14px;
+    }
+
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 2px;
+      top: 0;
+      color: #b94e33;
+      opacity: 0.45;
+      clip-path: inset(0 0 45% 0);
+      animation: glitch 2s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0,0); }
+      92% { transform: translate(-3px,1px); }
+      94% { transform: translate(4px,-1px); }
+      96% { transform: translate(-1px,2px); }
+    }
+
+    @media (max-width: 600px) {
+      nav a {
+        display: inline-block;
+        margin: 6px;
+      }
+
+      section {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="noise"></div>
+
+  <header>
+    <div class="hero">
+      <div class="label">BACKROOMS ARCHIVE // COORDINATE ERROR</div>
+      <h1 class="glitch" data-text="Level -1,000,000,000,001">
+        Level -1,000,000,000,001
+      </h1>
+      <div class="subtitle">“Мёртвая координата”</div>
+      <div class="warning">
+        ERROR: COORDINATE BELOW LIMIT<br>
+        LOCATION EXISTS // MAP DOES NOT CONFIRM
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <a href="#description">Описание</a>
+    <a href="#appearance">Внешний вид</a>
+    <a href="#anomalies">Аномалии</a>
+    <a href="#entities">Сущности</a>
+    <a href="#entrances">Входы</a>
+    <a href="#exits">Выходы</a>
+  </nav>
+
+  <main>
+    <section id="description">
+      <h2>Класс выживания</h2>
+
+      <div class="class-box">
+        <div class="class-card">
+          <strong>Класс 3</strong>
+          Опасный и нестабильный уровень.
+        </div>
+        <div class="class-card">
+          <strong>Ресурсы</strong>
+          Мало воды, еды почти нет.
+        </div>
+        <div class="class-card">
+          <strong>Сущности</strong>
+          Встречаются редко, но опасны.
+        </div>
+      </div>
+
+      <p>
+        <b>Level -1,000,000,000,001</b> — это огромная заброшенная зона,
+        похожая на мёртвый посёлок, старый технический городок или военную базу,
+        которую больше не признаёт реальность.
+      </p>
+
+      <p>
+        На уровне стоят полуразрушенные здания с выбитыми окнами,
+        ржавые грузовики, цистерны, сломанные дорожные знаки и пустые дворы,
+        заросшие сухой травой. Всё выглядит так, будто люди ушли отсюда много лет назад.
+        Но чем дольше находишься здесь, тем сильнее кажется, что они не ушли.
+      </p>
+
+      <div class="quote">
+        Это место не заброшено. Оно удалено. Просто не до конца.
+      </div>
+    </section>
+
+    <section id="appearance">
+      <h2>Внешний вид</h2>
+
+      <p>
+        Уровень выглядит как настоящая заброшенная территория посреди сухой степи.
+        Небо обычно бледно-голубое или серое. Солнце почти не видно,
+        но свет всё равно есть. Ночь здесь не наступает нормально.
+        Вместо неё начинается тусклая фаза — всё становится серо-синим,
+        ветер усиливается, а здания начинают скрипеть.
+      </p>
+
+      <div class="photo-grid">
+        <div class="photo">Ржавая техника стоит так, будто её бросили несколько секунд назад.</div>
+        <div class="photo">Здания пустые, но иногда в окнах появляются силуэты.</div>
+        <div class="photo">Дороги уходят в степь и обрываются без причины.</div>
+      </div>
+
+      <p>
+        Цвета уровня почти всегда выцветшие: бежевый, серо-жёлтый,
+        ржаво-коричневый, грязно-белый и тускло-зелёный.
+        Всё выглядит сухим, старым и мёртвым.
+      </p>
+    </section>
+
+    <section id="anomalies">
+      <h2>Аномалии</h2>
+
+      <h3>Повторяющиеся координаты</h3>
+      <p>
+        Если идти по дороге слишком долго, можно вернуться к тому же зданию.
+        Оно будет почти таким же, но с маленькими отличиями:
+        другая машина во дворе, лишнее окно, исчезнувшая дверь или новый дорожный знак.
+      </p>
+
+      <h3>Мёртвые объекты</h3>
+      <p>
+        Некоторые двери и окна выглядят настоящими, но оказываются просто плоской частью стены.
+        Иногда за окном нет комнаты — только чёрная пустота.
+      </p>
+
+      <h3>Смещение координаты</h3>
+      <p>
+        Иногда весь уровень начинает “сдвигаться”.
+        Дороги исчезают, здания прыгают на горизонте, а земля покрывается тёмными пятнами,
+        похожими на не загруженную текстуру.
+      </p>
+
+      <div class="terminal">
+        <span>&gt; GPS SIGNAL FOUND</span>
+        <span>&gt; LOCATION: -1,000,000,000,001</span>
+        <span>&gt; MAP ERROR</span>
+        <span>&gt; COORDINATE BELOW LIMIT</span>
+        <span>&gt; DO NOT ENTER STRUCTURES DURING SHIFT</span>
+      </div>
+    </section>
+
+    <section id="entities">
+      <h2>Сущности</h2>
+
+      <p>
+        На этом уровне нет толп монстров. Большую часть времени кажется,
+        что ты полностью один. Но это обман. Сущности здесь редкие,
+        тихие и появляются тогда, когда игрок уже привык к пустоте.
+      </p>
+
+      <div class="entity">
+        <h3>1. Ржавые</h3>
+        <p class="danger">Опасность: высокая</p>
+        <p>
+          Ржавые выглядят как люди, покрытые пылью, ржавчиной и кусками старого металла.
+          Издалека их можно спутать с обычными фигурами в рабочей одежде.
+          Они стоят возле машин, цистерн, гаражей и внутри старых зданий.
+        </p>
+        <p>
+          Они становятся агрессивными, если долго смотреть им в лицо,
+          шуметь рядом или трогать ржавую технику.
+        </p>
+        <p>
+          <b>Как выжить:</b> не смотреть прямо, не шуметь, выйти на открытую бетонную площадку.
+        </p>
+      </div>
+
+      <div class="entity">
+        <h3>2. Пустые водители</h3>
+        <p class="danger">Опасность: средняя / неизвестная</p>
+        <p>
+          Иногда в кабине старого грузовика можно увидеть неподвижный силуэт.
+          Если подойти ближе, кабина окажется пустой. После этого где-то далеко заводится двигатель.
+        </p>
+        <p>
+          Через несколько минут по дороге может медленно проехать ржавая машина без водителя.
+          Если стоять на пути — она не остановится.
+        </p>
+        <p>
+          <b>Правило:</b> услышал двигатель — уходи с дороги.
+        </p>
+      </div>
+
+      <div class="entity">
+        <h3>3. Смотрящие окна</h3>
+        <p class="danger">Опасность: нестабильная</p>
+        <p>
+          В некоторых зданиях появляются тёмные силуэты в окнах.
+          Они не двигаются, но всегда смотрят наружу.
+        </p>
+        <p>
+          Заходить в такие здания нельзя. Внутри коридоры становятся длиннее,
+          двери исчезают, а выход может переместиться.
+        </p>
+        <p>
+          <b>Правило:</b> если в окне есть силуэт — не светить фонариком и не фотографировать.
+        </p>
+      </div>
+    </section>
+
+    <section id="entrances">
+      <h2>Входы</h2>
+
+      <ul>
+        <li>Пройти слишком далеко по заброшенной дороге на пустынном уровне.</li>
+        <li>Зайти в ржавый грузовик, внутри которого слышен слабый гул.</li>
+        <li>Открыть дверь с надписью <b>COORDINATE ERROR</b>.</li>
+        <li>Найти на карте точку <b>-1,000,000,000,001</b> и попытаться приблизить её.</li>
+      </ul>
+    </section>
+
+    <section id="exits">
+      <h2>Выходы</h2>
+
+      <h3>Ржавая остановка</h3>
+      <p>
+        Иногда на пустой дороге появляется старая автобусная остановка.
+        Если сесть на неё и не двигаться 10 минут, можно попасть на случайный безопасный уровень.
+      </p>
+
+      <h3>Белая дверь</h3>
+      <p>
+        Редкая дверь внутри разрушенного здания. Она выглядит слишком чистой.
+        Может вести на Level 0 или другой заброшенный уровень.
+      </p>
+
+      <h3>Дорога без теней</h3>
+      <p>
+        Если найти дорогу, на которой вообще нет теней, и идти прямо, можно выйти.
+        Главное — не оборачиваться.
+      </p>
+    </section>
+
+    <section>
+      <h2>Последняя запись</h2>
+
+      <div class="terminal">
+        <span>&gt; День неизвестен.</span>
+        <span>&gt; Я снова прошёл мимо той же машины.</span>
+        <span>&gt; В прошлый раз у неё не было двери.</span>
+        <span>&gt; Сейчас дверь открыта.</span>
+        <span>&gt; Внутри кто-то сидит.</span>
+        <span>&gt; Двигатель только что завёлся.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    BACKROOMS FAN LEVEL // Level -1,000,000,000,001 // “Мёртвая координата”
+  </footer>
+
+  <script>
+    const title = document.querySelector(".glitch");
+
+    setInterval(() => {
+      if (Math.random() < 0.25) {
+        title.textContent = "Level -1,000,000,000,00█";
+        setTimeout(() => {
+          title.textContent = "Level -1,000,000,000,001";
+        }, 120);
+      }
+    }, 1600);
+
+    const terminalLines = document.querySelectorAll(".terminal span");
+
+    setInterval(() => {
+      terminalLines.forEach(line => {
+        if (Math.random() < 0.08) {
+          const old = line.textContent;
+          line.textContent = old.replace(/[A-ZА-Я0-9]/g, char => {
+            return Math.random() < 0.08 ? "█" : char;
+          });
+
+          setTimeout(() => {
+            line.textContent = old;
+          }, 180);
+        }
+      });
+    }, 900);
+  </script>
+</body>
+</html>
